@@ -1,7 +1,7 @@
 Package: biblioDB
 Version: 0.0.1.9001
 Encoding: UTF-8
-Title: Interacting with BibTeX Databases
+Title: Bib Extension for Relational Databases
 Authors@R: c(
     person("Miguel", "Alvarez", email="kamapu78@gmail.com",
         role=c("aut","cre"), comment=c(ORCID="0000-0003-1500-1834"))
@@ -23,8 +23,8 @@ Remotes:
     gitlab::kamapu/dbaccess,
     github::kamapu/yamlme
 LazyData: true
-Description: Reading and writing BibTeX files by using data frames. Also
-    interactions with PostgreSQL databases are implemented.
+Description:
+    Extension to the package 'biblio' for interacting with relational databases.
 License: GPL (>= 2)
 URL: https://github.com/kamapu/biblio
 BugReports: https://github.com/kamapu/taxlist/issues
