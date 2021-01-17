@@ -9,24 +9,19 @@ Authors@R: c(
 Depends:
     R(>= 3.5.0)
 Imports:
+	biblio,
     DBI,
     methods,
-    readODS,
-    rpostgis,
-    RPostgreSQL,
-    stringr
+    RPostgreSQL
 Suggests:
     devtools,
     rmarkdown,
     covr
-Remotes:
-    gitlab::kamapu/dbaccess,
-    github::kamapu/yamlme
 LazyData: true
 Description:
     Extension to the package 'biblio' for interacting with relational databases.
 License: GPL (>= 2)
 URL: https://github.com/kamapu/biblio
-BugReports: https://github.com/kamapu/taxlist/issues
+BugReports: https://github.com/kamapu/biblioDB/issues
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1.9000

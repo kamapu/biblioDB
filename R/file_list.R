@@ -1,35 +1,33 @@
 #' @name file_list
 #' 
-#' @rdname add_files
+#' @rdname file_list
 #' 
-#' @title Add List of Files from Additional Table
+#' @title Description of files associated to entries in BibTeX databases
 #' 
 #' @description 
-#' The function `add_files<-` attempts to harmonize relational databases listing
-#' files in a separated relation (data frame).
+#' Main documents as well as supplementary material may be linked to the
+#' respective bibliographic entries in a BibTeX database. File names, MIME-types
+#' and descriptions are stored in a single column by JabRef, separating columns
+#' by colons and multiple files by semicolons. In a relational database, file
+#' information may be stored in a separated table and linked by bibtexkeys.
 #' 
-#' The reverse function is called `get_files`, where a string will be converted
-#' into a data frame.
+#' The function `file_list()` produce this table, while the replace method
+#' `file_list<-` will use such table to write the column 'file' in a
+#' [lib_df-class] object.
 #' 
-#' @param x A data frame including reference entries imported from BibTeX
-#'     databases by \code{\link{read_bib}}. At least a column called 'bibtexkey'
-#'     have to be included in this table.
+#' @param x An object of class [lib_df-class], usually reference entries
+#'     imported from a BibTeX databases by [read_bib()].
 #' @param value A data frame listing files with respective bibtexkey and
 #'     MIME-Type. In this table the columns 'bibtexkey', 'file', and 'mime' are
 #'     mandatory. The occurrence of all bibtexkey values in 'value' will be
-#'     cross-checked and evenctually cause an error, thus you may clean this
-#'     data frame before using it.
+#'     cross-checked and eventually retrieve an error message.
 #' @param priority Character value. A keyword used as file description to define
 #'     which is the main document in the entry. Files including this description
 #'     will be listed first in the output bibtex file (JabRef style).
+#' @param ... Further parameters passed among methods.
 #' 
 #' @return
-#' In `add_files<-` the same data frame 'refs' with an inserted or updated
-#' column 'file'.
-#' For `get_files`, a data frame with three columns, namely 'bibtexkey', 'file',
-#' 'mime', and 'description' where every file is listed in aseparated row.
-#'  
-#' @author Miguel Alvarez \email{kamapu78@@gmail.com}
+#' A data frame by `file_list()` or a [lib_df-class] object by `file_list<-`.
 #' 
 #' @export
 #' 
@@ -66,7 +64,7 @@ file_list.lib_df <- function(x, ...) {
 #' @exportMethod file_list<-
 #' 
 setGeneric("file_list<-", function(x, ..., value)
-			standardGeneric("add_files<-"))
+			standardGeneric("file_list<-"))
 
 #' @rdname file_list
 #' 
@@ -82,6 +80,8 @@ setReplaceMethod("file_list", signature(x = "lib_df", value = "data.frame"),
 			if(any(!value$bibtexkey %in% x$bibtexkey))
 				stop(paste("Some values of 'bibtexkey' in 'value'",
 								"are not present in 'x'."))
+			if(!"description" %in% colnames(x))
+				x$description <- NA
 			value <- value[order(value$description == priority,
 							decreasing = TRUE),]
 			value$description[is.na(value$description)] <- ""
