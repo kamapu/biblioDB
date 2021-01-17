@@ -14,14 +14,15 @@ Imports:
     methods,
     RPostgreSQL
 Suggests:
+    covr,
     devtools,
     rmarkdown,
-    covr
+    testthat
 LazyData: true
 Description:
     Extension to the package 'biblio' for interacting with relational databases.
 License: GPL (>= 2)
-URL: https://github.com/kamapu/biblio
+URL: https://github.com/kamapu/biblioDB
 BugReports: https://github.com/kamapu/biblioDB/issues
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1.9000

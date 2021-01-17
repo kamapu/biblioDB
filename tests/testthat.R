@@ -3,6 +3,7 @@
 # 		"how-to-add-code-coverage-codecov-to-your-r-package/"))
 
 library(testthat)
+library(biblio)
 library(biblioDB)
 
 test_check("biblioDB")
