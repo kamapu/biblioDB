@@ -113,9 +113,13 @@ write_pg <- function(conn, name, df1, df2, main_table="main_table",
 		message(paste("No data frames provided.",
 						"The created database will be empty.")) else {
 		message("Inserting data...")
-		pgInsert(conn, c(name, main_table), df1, ...)
+		dbWriteTable(conn, c(name, main_table), df1, append = TRUE,
+				row.names = FALSE)
+		## pgInsert(conn, c(name, main_table), df1, ...)
 		if(!missing(df2))
-			pgInsert(conn, c(name, file_list), df2, ...)
+			dbWriteTable(conn, c(name, file_list), df2, append = TRUE,
+					row.names = FALSE)
+			## pgInsert(conn, c(name, file_list), df2, ...)
 	}
 	message("DONE!")
 }

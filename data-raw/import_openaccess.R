@@ -3,7 +3,11 @@
 # Author: Miguel Alvarez
 ################################################################################
 
+library(devtools)
+install_github("kamapu/biblioDB", "new_pack")
+
 library(biblio)
+library(biblioDB)
 
 openaccess <- read_bib(x = "../Literatur_db/bib/MiguelReferences.bib")
 openaccess <- subset(openaccess, bibtexkey %in%

@@ -12,6 +12,7 @@ Imports:
 	biblio,
     DBI,
     methods,
+    readODS,
     RPostgreSQL
 Suggests:
     covr,
