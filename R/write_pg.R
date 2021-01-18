@@ -124,9 +124,9 @@ write_pg.lib_df <- function(x, conn, name, main_table = "main_table",
 	x <- x[ , colnames(x) != "file"]
 	if(match_cols)
 		x <- x[ , colnames(x) %in% desc_tab$field]
-	dbWriteTable(conn, Id(schema = name, table = main_table), x, append = TRUE,
-			row.names = FALSE)
-	dbWriteTable(conn, c(name, file_list), x_files, append = TRUE,
-			row.names = FALSE)
+	dbWriteTable(conn, Id(schema = name, table = main_table), x,
+			append = TRUE, row.names = FALSE)
+	dbWriteTable(conn, Id(schema = name, table = file_list), x_files,
+			append = TRUE, row.names = FALSE)
 	message("DONE!")
 }
