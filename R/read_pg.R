@@ -1,10 +1,12 @@
 #' @name read_pg
+#' 
 #' @rdname read_pg
 #' 
 #' @title Read bibliographic databases from PostgreSQL
 #' 
 #' @description 
-#' Databases tabulated in PostgreSQL will be imported in a data frame.
+#' Databases tabulated in PostgreSQL will be imported into a [lib_df-class]
+#' object.
 #' 
 #' @param conn A database connection established with [dbConnect()] or
 #'     [dbaccess::connect_db2()].
@@ -17,26 +19,32 @@
 #'     attributes.
 #' @param add_files Logical value indicating whether information in table
 #'     'file_list' should be appended to the output or not.
+#' @param simplify Logical value indicating whether empty columns should be
+#'     skipped from output or not.
 #' @param ... Further arguments passed among methods.
 #' 
-#' @exportMethod read_pg
+#' @return A [lib_df-class] object.
 #' 
-setGeneric("read_pg",
-		function(conn, name, ...)
-			standardGeneric("read_pg")
-)
+#' @export
+#' 
+read_pg <- function (conn, ...) {
+	UseMethod("read_pg", conn)
+}
 
 #' @rdname read_pg
-#' @aliases read_pg,PostgreSQLConnection,character-method
 #' 
-setMethod("read_pg", signature(conn="PostgreSQLConnection", name="character"),
-		function(conn, name, main_table="main_table", file_list="file_list",
-				add_files=TRUE, ...) {
-			Refs <- dbReadTable(conn, c(name, main_table))
-			if(add_files) {
-				Files <- dbReadTable(conn, c(name, file_list))
-				add_files(Refs) <- Files
-			}
-			class(Refs) <- c("lib_df", "data.frame")
-			return(Refs)
-		})
+#' @export
+#' 
+read_pg.PostgreSQLConnection <- function(conn, name, main_table = "main_table",
+		file_list = "file_list", add_files = TRUE, simplify = FALSE, ...) {
+	Refs <- dbReadTable(conn, c(name, main_table))
+	if(simplify)
+		Refs <- Refs[ , apply(Refs, 2, function(x) !all(is.na(x)))]
+	class(Refs) <- c("lib_df", "data.frame")
+	if(add_files) {
+		Files <- dbReadTable(conn, c(name, file_list))
+		file_list(Refs) <- Files
+	}
+	class(Refs) <- c("lib_df", "data.frame")
+	return(Refs)
+}

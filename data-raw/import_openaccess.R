@@ -18,10 +18,15 @@ Bib <- Bib[c(1:100),]
 # Connect postgres
 library(dbaccess)
 library(RPostgreSQL)
-conn <- connect_db(dbname = "test_db", user = "miguel")
+conn <- connect_db2(dbname = "test_db", user = "miguel")
 
-# TODO: resolve not working function
+# TODO: resolve warnings
 write_pg(Bib, conn, "references2021", match_cols = TRUE, overwrite = TRUE)
+
+# Empty DB
+write_pg(new_lib(), conn, "empty_list", match_cols = TRUE, overwrite = TRUE)
+
+
 
 
 
