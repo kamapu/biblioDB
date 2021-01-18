@@ -1,28 +1,38 @@
 #' @name write_pg
 #' 
-#' @title Writing References from Data Frame to a Postgres Table
+#' @rdname write_pg
+#' 
+#' @title Writing References from Data Frame to a PostgreSQL Schema
 #' 
 #' @description 
-#' This function implement the creation of a Postgres table and its population
-#' with data imported by [read_bib()]. To import data from a Postgres
-#' table created by this function just use [dbReadTable()].
+#' Required PostgreSQL tables will be created in a selected schema within an
+#' existing database and populated with the entries of a [lib_df-class] object.
 #' 
+#' @param x A [lib_df-class] object containing the references to be imported.
 #' @param conn A connection established with [dbConnect()].
 #' @param name A character value with the name of the schema.
-#' @param df1 A data frame with the content for the main table.
-#' @param df2 A data frame with the content for the file table.
 #' @param main_table A character value indicating the name of the main table in
 #'     the database.
 #' @param file_list A character value indicating the name of the file list in
 #'     the database.
+#' @param match_cols A logical value indicating whether columns in 'x' should be
+#'     filtered to only matching ones (regarding the written database) or not.
 #' @param overwrite A logical value indicating whether existing tables should be
 #'     overwritten or not.
 #' @param ... Further arguments passed to pgInsert.
 #' 
-#' @export write_pg
+#' @export 
 #' 
-write_pg <- function(conn, name, df1, df2, main_table="main_table",
-		file_list="file_list", overwrite=FALSE, ...) {
+write_pg <- function (x, ...) {
+	UseMethod("write_pg", x)
+}
+
+#' @rdname write_pg
+#' 
+#' @export 
+#' 
+write_pg.lib_df <- function(x, conn, name, main_table = "main_table",
+		file_list = "file_list", match_cols = FALSE, overwrite = FALSE, ...) {
 	# Create Schema if missing
 	Query <- paste0("SELECT EXISTS(SELECT 1 FROM pg_namespace", "\n",
 			"WHERE nspname = '", name,"');\n")
@@ -109,17 +119,14 @@ write_pg <- function(conn, name, df1, df2, main_table="main_table",
 				}
 			})
 	# Inserting data
-	if(missing(df1))
-		message(paste("No data frames provided.",
-						"The created database will be empty.")) else {
-		message("Inserting data...")
-		dbWriteTable(conn, c(name, main_table), df1, append = TRUE,
-				row.names = FALSE)
-		## pgInsert(conn, c(name, main_table), df1, ...)
-		if(!missing(df2))
-			dbWriteTable(conn, c(name, file_list), df2, append = TRUE,
-					row.names = FALSE)
-			## pgInsert(conn, c(name, file_list), df2, ...)
-	}
+	message("Inserting data...")
+	x_files <- file_list(x)
+	x <- x[ , colnames(x) != "file"]
+	if(match_cols)
+		x <- x[ , colnames(x) %in% desc_tab$field]
+	dbWriteTable(conn, Id(schema = name, table = main_table), x, append = TRUE,
+			row.names = FALSE)
+	dbWriteTable(conn, c(name, file_list), x_files, append = TRUE,
+			row.names = FALSE)
 	message("DONE!")
 }
