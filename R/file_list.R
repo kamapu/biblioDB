@@ -42,19 +42,26 @@ file_list <- function (x, ...) {
 file_list.lib_df <- function(x, ...) {
 	if(!"bibtexkey" %in% colnames(x))
 		stop("Column 'bibtexkey' is mandatory in 'x'.")
-	if(!"file" %in% colnames(x))
-		stop("Column 'file' is mandatory in 'x'.")
-	file_string <- strsplit(x$file, ";", fixed=TRUE)
-	file_string <- data.frame(bibtexkey=rep(x$bibtexkey, sapply(file_string,
-							length)),
-			file=unlist(file_string),
-			stringsAsFactors=FALSE)
-	x <- do.call(rbind, strsplit(file_string$file, ":", fixed=TRUE))
-	file_string$file <- x[,2]
-	file_string$mime <- x[,3]
-	file_string$description <- x[,1]
-	file_string$description[file_string$description == ""] <- NA
-	return(file_string[!is.na(file_string$file),])
+	if(!"file" %in% colnames(x)) {
+		warning("Column 'file' is missing in 'x'.")
+		return(NULL)
+	} else {
+		if(length(x$file[!is.na(x$file)]) == 0) {
+			warning("No file information in 'x'.")
+			return(NULL)
+		} else {
+			file_string <- strsplit(x$file, ";", fixed=TRUE)
+			file_string <- data.frame(bibtexkey=rep(x$bibtexkey,
+							sapply(file_string, length)),
+					file=unlist(file_string), stringsAsFactors=FALSE)
+			x <- do.call(rbind, strsplit(file_string$file, ":", fixed=TRUE))
+			file_string$file <- x[,2]
+			file_string$mime <- x[,3]
+			file_string$description <- x[,1]
+			file_string$description[file_string$description == ""] <- NA
+			return(file_string[!is.na(file_string$file),])
+		}
+	}
 }
 
 #' @rdname file_list
