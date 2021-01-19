@@ -5,7 +5,7 @@
 
 library(devtools)
 install_github("kamapu/biblio")
-install_github("kamapu/biblioDB", "new_pack")
+install_github("kamapu/biblioDB")
 
 library(biblio)
 library(biblioDB)
