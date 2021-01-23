@@ -33,6 +33,7 @@ read_pg <- function (conn, ...) {
 
 #' @rdname read_pg
 #' 
+#' @method read_pg PostgreSQLConnection
 #' @export
 #' 
 read_pg.PostgreSQLConnection <- function(conn, name, main_table = "main_table",
@@ -45,6 +46,5 @@ read_pg.PostgreSQLConnection <- function(conn, name, main_table = "main_table",
 		Files <- dbReadTable(conn, c(name, file_list))
 		file_list(Refs) <- Files
 	}
-	class(Refs) <- c("lib_df", "data.frame")
 	return(Refs)
 }

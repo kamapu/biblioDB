@@ -37,6 +37,7 @@ file_list <- function (x, ...) {
 
 #' @rdname file_list
 #' 
+#' @method file_list lib_df
 #' @export 
 #' 
 file_list.lib_df <- function(x, ...) {
@@ -77,26 +78,33 @@ setGeneric("file_list<-", function(x, ..., value)
 #' 
 #' @aliases file_list<-,lib_df,data.frame-method
 #' 
+#' @export 
+#' 
 setReplaceMethod("file_list", signature(x = "lib_df", value = "data.frame"),
 		function(x, priority = "main text", ..., value) {
-			if(!"bibtexkey" %in% colnames(x))
-				stop("'bibtexkey' is a mandatory column in 'x'.")
-			if(any(!c("bibtexkey", "file", "mime") %in% colnames(value)))
-				stop(paste("'bibtexkey', 'file' and 'mime' are mandatory",
-								"columns in 'value'."))
-			if(any(!value$bibtexkey %in% x$bibtexkey))
-				stop(paste("Some values of 'bibtexkey' in 'value'",
-								"are not present in 'x'."))
-			if(!"description" %in% colnames(x))
-				x$description <- NA
-			value <- value[order(value$description == priority,
-							decreasing = TRUE),]
-			value$description[is.na(value$description)] <- ""
-			value$file <- with(value, paste(description, file, mime, sep = ":"))
-			value <- split(value, value$bibtexkey)
-			value <- do.call(rbind, lapply(value, function(x)
-								c(x$bibtexkey[1], paste0(x$file,
-												collapse = ";"))))
-			x$file <- value[match(x$bibtexkey, value[ , 1]), 2]
-			return(x)
+			if(nrow(value) == 0) {
+				warning("No files to add in 'x'.")
+				return(x)
+			} else {
+				if(!"bibtexkey" %in% colnames(x))
+					stop("'bibtexkey' is a mandatory column in 'x'.")
+				if(any(!c("bibtexkey", "file", "mime") %in% colnames(value)))
+					stop(paste("'bibtexkey', 'file' and 'mime' are mandatory",
+									"columns in 'value'."))
+				if(any(!value$bibtexkey %in% x$bibtexkey))
+					stop(paste("Some values of 'bibtexkey' in 'value'",
+									"are not present in 'x'."))
+				if(!"description" %in% colnames(x))
+					x$description <- NA
+				value <- value[order(value$description == priority,
+								decreasing = TRUE),]
+				value$description[is.na(value$description)] <- ""
+				value$file <- with(value, paste(description, file, mime, sep = ":"))
+				value <- split(value, value$bibtexkey)
+				value <- do.call(rbind, lapply(value, function(x)
+									c(x$bibtexkey[1], paste0(x$file,
+													collapse = ";"))))
+				x$file <- value[match(x$bibtexkey, value[ , 1]), 2]
+				return(x)
+			}
 		})

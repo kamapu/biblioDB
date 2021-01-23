@@ -29,6 +29,7 @@ write_pg <- function (x, ...) {
 
 #' @rdname write_pg
 #' 
+#' @method write_pg lib_df
 #' @export 
 #' 
 write_pg.lib_df <- function(x, conn, name, main_table = "main_table",
@@ -77,6 +78,7 @@ write_pg.lib_df <- function(x, conn, name, main_table = "main_table",
 	suppressMessages(desc_tab <- read_ods(file.path(path.package("biblio"),
 							"fields_list.ods"), "main_table"))
 	desc_tab <- desc_tab[desc_tab$field != "file",]
+	desc_tab$description <- gsub("'", "\'\'", desc_tab$description)
 	suppressMessages(desc_fl <- read_ods(file.path(path.package("biblio"),
 							"fields_list.ods"), "file_list"))
 	message("Creating tables...")
