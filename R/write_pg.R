@@ -138,6 +138,3 @@ write_pg.lib_df <- function(x, conn, name, main_table = "main_table",
 			partial.match = TRUE)
 	message("DONE!")
 }
-
-x <- Bib
-
