@@ -31,11 +31,10 @@ compare_df(Bib, Bib2)
 # Create database
 conn <- connect_db2(dbname = "test_db", user = "miguel")
 
-write_pg(Bib, conn, "refs_1")
+write_pg(Bib, conn, "refs_1", overwrite = TRUE)
 
-library(readODS)
-
-dbSendQuery(conn, "DROP SCHEMA refs_1 CASCADE;")
+#library(readODS)
+#dbSendQuery(conn, "DROP SCHEMA refs_1 CASCADE;")
 
 # debug update
 object <- conn

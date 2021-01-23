@@ -126,9 +126,12 @@ write_pg.lib_df <- function(x, conn, name, main_table = "main_table",
 	x <- x[ , colnames(x) != "file"]
 	if(match_cols)
 		x <- x[ , colnames(x) %in% desc_tab$field]
-	dbWriteTable(conn, Id(schema = name, table = main_table), x,
-			append = TRUE, row.names = FALSE)
-	dbWriteTable(conn, Id(schema = name, table = file_list), x_files,
-			append = TRUE, row.names = FALSE)
+	## # TODO: After issue is solved in RPostgreSQL re-use these commands
+	## dbWriteTable(conn, Id(schema = name, table = main_table), x,
+	##         append = TRUE, row.names = FALSE)
+	## dbWriteTable(conn, Id(schema = name, table = file_list), x_files,
+	##         append = TRUE, row.names = FALSE)
+	pgInsert(conn = conn, name = c(name, main_table), data.obj = x)
+	pgInsert(conn = conn, name = c(name, file_list), data.obj = x_files)
 	message("DONE!")
 }

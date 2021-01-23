@@ -12,12 +12,13 @@ library(devtools)
 library(rmarkdown)
 
 # document package
-document()
+
 
 # write README.md
 ## render("README.Rmd")
 
-# Build package
+# Document and build package
+document()
 pkg_loc <- build(path="build-pkg")
 
 # Test the package
