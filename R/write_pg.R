@@ -124,6 +124,7 @@ write_pg.lib_df <- function(x, conn, name, main_table = "main_table",
 	message("Inserting data...")
 	x_files <- file_list(x)
 	x <- x[ , colnames(x) != "file"]
+	class(x) <- "data.frame"
 	if(match_cols)
 		x <- x[ , colnames(x) %in% desc_tab$field]
 	## # TODO: After issue is solved in RPostgreSQL re-use these commands
@@ -131,7 +132,12 @@ write_pg.lib_df <- function(x, conn, name, main_table = "main_table",
 	##         append = TRUE, row.names = FALSE)
 	## dbWriteTable(conn, Id(schema = name, table = file_list), x_files,
 	##         append = TRUE, row.names = FALSE)
-	pgInsert(conn = conn, name = c(name, main_table), data.obj = x)
-	pgInsert(conn = conn, name = c(name, file_list), data.obj = x_files)
+	pgInsert(conn = conn, name = c(name, main_table), data.obj = x,
+			partial.match = TRUE)
+	pgInsert(conn = conn, name = c(name, file_list), data.obj = x_files,
+			partial.match = TRUE)
 	message("DONE!")
 }
+
+x <- Bib
+

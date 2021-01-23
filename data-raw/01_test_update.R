@@ -53,3 +53,4 @@ Test <- read_pg(conn = conn, name = name)
 
 add_files = TRUE
 simplify = FALSE
+match_cols = FALSE
