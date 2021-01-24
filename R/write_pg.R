@@ -105,6 +105,8 @@ write_pg.lib_df <- function(x, conn, name, main_table = "main_table",
 	Query <- with(desc_fl, {
 				field2 <- rep("TEXT", length(field))
 				field2[field == "file"] <- "TEXT PRIMARY KEY"
+				field2[field == "bibtexkey"] <- paste0("TEXT REFERENCES \"",
+						name, "\".\"", main_table, "\" (bibtexkey)")
 				field2 <- paste0("\"", field, "\" ", field2)
 				paste0(field2, collapse=",\n")
 			})

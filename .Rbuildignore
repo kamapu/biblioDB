@@ -1,7 +1,6 @@
-^readings$
+^\.github$
+^\.dbeaver$
 ^data-raw$
 ^build-pkg$
 ^README\.Rmd$
 ^README\.md$
-^R_old$
-^\.github$

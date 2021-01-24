@@ -33,6 +33,17 @@ conn <- connect_db2(dbname = "test_db", user = "miguel")
 
 write_pg(Bib, conn, "refs_1", overwrite = TRUE)
 
+# Test read function
+Test <- read_pg(conn = conn, name = "refs_1")
+
+# Test compare function
+compare_df(x = conn, y = Bib2, name = "refs_1")
+
+
+
+
+
+
 #library(readODS)
 #dbSendQuery(conn, "DROP SCHEMA refs_1 CASCADE;")
 

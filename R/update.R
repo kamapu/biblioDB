@@ -54,19 +54,15 @@ sql_update <- function(conn, obj, name, key, ...) {
 #' In `update_pg` actions 'delete', 'add', and 'update' have to be accordingly
 #' set as `TRUE`, otherwise only `print_report()` will be executed.
 #' 
-#' @param db Either a data frame imported by [read_pg()] or a connection
-#'     established by [dbConnect()] to a reference database.
-#' @param bib Either a data frame imported by [read_bib()] or a path to a bibtex
-#'     file. This data set represent an updated version of 'db'.
-#' @param print_only Logical value indicating whether the outcome will be only
-#'     printed in the console or stored as a list.
+#' @param object A connection to a reference database established by
+#'     [dbConnect()].
+#' @param revision A [lib_df-class] object imported by [read_bib()]. This data
+#'     set represent an updated version of 'object'.
+#' @param key A character value indicating the name of the column used as
+#'     identifier for references.
 #' @param name Character value indicating the name of the schema in Postgres.
 #'     This argument is passed to [read_pg()].
 #' @param db_args List of named arguments passed to [read_pg()].
-#' @param bib_args List of named arguments passed to [read_bib()].
-#' @param get_files Logical value indicating whether a list of files should be
-#'     extracted from 'bib' or not. If `TRUE`, then function [get_files()] will
-#'     be applied.
 #' @param main_table Character value indicating the name of main table in
 #'     Postgres (see [read_pg()]).
 #' @param file_list Character value indicating the name of file list table in
@@ -77,7 +73,7 @@ sql_update <- function(conn, obj, name, key, ...) {
 #'     inserted in 'db'.
 #' @param update Logical value indicating whether entries modified in 'bib' have
 #'     to be updated in 'db'.
-#' @param ... Further arguments passed among methods.
+#' @param ... Further arguments passed to [pgInsert()].
 #' 
 #' @method update PostgreSQLConnection
 #' @export
@@ -87,50 +83,47 @@ update.PostgreSQLConnection <- function(object, revision, key = "bibtexkey",
 		update = FALSE, main_table = "main_table", file_list = "file_list",
 		...) {
 	db_tab <- do.call(read_pg, c(list(conn = object, name = name), db_args))
-	Comp_obj <- compare_df(x = object, y = revision)
+	Comp_obj <- compare_df(x = object, y = revision, name = name)
+	# TODO: Test databases using a different key
 	if(all(!c(delete, add, update)))
 		print(Comp_obj) else {
 		db_fl <- file_list(db_tab)
 		db_tab <- db_tab[ ,colnames(db_tab) != "file"]
 		bib_fl <- file_list(revision)
 		revision <- revision[ ,!colnames(revision) != "file"]
-		
-		# TODO: use compare_df in this package before
-		
-		
-		Comp_mt <- biblio:::compare_df(db_tab, revision, "bibtexkey")
-		Comp_fl <- biblio:::compare_df(db_fl, bib_fl, "file")
+		# TODO: Look for options to replace pgInsert by dbWriteTable
 		if(add) {
-			if(nrow(Comp_mt$added) > 0) {
-				class(Comp_mt$added) <- "data.frame"
-				pgInsert(object, c(name, main_table), Comp_mt$added, ...)
-			}
-			if(nrow(Comp_fl$added) > 0) {
-				class(Comp_fl$added) <- "data.frame"
-				pgInsert(object, c(name, file_list), Comp_fl$added, ...)
-			}
+			if(nrow(Comp_obj[[main_table]]$added) > 0)
+				pgInsert(object, c(name, main_table),
+						Comp_obj[[main_table]]$added, ...)
+			if(nrow(Comp_obj[[file_list]]$added) > 0)
+				pgInsert(object, c(name, file_list),
+						Comp_obj[[file_list]]$added, ...)
 		}
 		if(delete) {
-			if(length(Comp_fl$deleted) > 0)
-				biblio:::sql_delete(object, Comp_fl, c(name, file_list),
+			# Inverted order because of dependencies
+			if(length(Comp_obj[[file_list]]$deleted) > 0)
+				sql_delete(conn = object, obj = Comp_obj[[file_list]],
+						c(name, file_list),
 						"file")
-			if(length(Comp_mt$deleted) > 0)
-				biblio:::sql_delete(object, Comp_mt, c(name, main_table),
+			if(length(Comp_obj[[main_table]]$deleted) > 0)
+				sql_delete(conn = object, obj = Comp_obj[[main_table]],
+						c(name, main_table),
 						"bibtexkey")
 		}
 		if(update) {
-			if(nrow(Comp_mt$updated) > 0) {
-				for(i in colnames(Comp_mt$new_vals))
-					Comp_mt$new_vals[,i] <- gsub("'", "''",
-							Comp_mt$new_vals[,i], fixed=TRUE)
-				biblio:::sql_update(object, Comp_mt, c(name, main_table),
+			if(nrow(Comp_obj[[main_table]]$updated) > 0) {
+				for(i in colnames(Comp_obj[[main_table]]$new_vals))
+					Comp_obj[[main_table]]$new_vals[,i] <- gsub("'", "\'\'",
+							Comp_obj[[main_table]]$new_vals[,i], fixed=TRUE)
+				sql_update(object, Comp_obj[[main_table]], c(name, main_table),
 						"bibtexkey")
 			}
-			if(nrow(Comp_fl$updated) > 0) {
-				for(i in colnames(Comp_fl$new_vals))
-					Comp_fl$new_vals[,i] <- gsub("'", "''",
-							Comp_fl$new_vals[,i], fixed=TRUE)
-				biblio:::sql_update(object, Comp_fl, c(name, file_list),
+			if(nrow(Comp_obj[[file_list]]$updated) > 0) {
+				for(i in colnames(Comp_obj[[file_list]]$new_vals))
+					Comp_obj[[file_list]]$new_vals[,i] <- gsub("'", "\'\'",
+							Comp_obj[[file_list]]$new_vals[,i], fixed=TRUE)
+				sql_update(object, Comp_obj[[file_list]], c(name, file_list),
 						"file")
 			}
 		}
