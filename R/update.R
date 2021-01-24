@@ -95,10 +95,10 @@ update.PostgreSQLConnection <- function(object, revision, key = "bibtexkey",
 		if(add) {
 			if(nrow(Comp_obj[[main_table]]$added) > 0)
 				pgInsert(object, c(name, main_table),
-						Comp_obj[[main_table]]$added, ...)
+						Comp_obj[[main_table]]$added, partial.match = TRUE, ...)
 			if(nrow(Comp_obj[[file_list]]$added) > 0)
 				pgInsert(object, c(name, file_list),
-						Comp_obj[[file_list]]$added, ...)
+						Comp_obj[[file_list]]$added, partial.match = TRUE, ...)
 		}
 		if(delete) {
 			# Inverted order because of dependencies

@@ -35,13 +35,19 @@ write_pg(Bib, conn, "refs_1", overwrite = TRUE)
 
 # Test read function
 Test <- read_pg(conn = conn, name = "refs_1")
+## Test <- read_pg(conn = conn, name = "refs_1", simplify = TRUE)
 
 # Test compare function
 compare_df(x = conn, y = Bib2, name = "refs_1")
 
+# Test no action
+update(object = conn, revision = Bib2, name = "refs_1")
 
+# Test delete
+update(object = conn, revision = Bib2, name = "refs_1", delete = TRUE)
 
-
+# Test add
+update(object = conn, revision = Bib2, name = "refs_1", add = TRUE)
 
 
 #library(readODS)
