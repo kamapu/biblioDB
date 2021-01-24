@@ -49,25 +49,6 @@ update(object = conn, revision = Bib2, name = "refs_1", delete = TRUE)
 # Test add
 update(object = conn, revision = Bib2, name = "refs_1", add = TRUE)
 
+# Test update
+update(object = conn, revision = Bib2, name = "refs_1", update = TRUE)
 
-#library(readODS)
-#dbSendQuery(conn, "DROP SCHEMA refs_1 CASCADE;")
-
-# debug update
-object <- conn
-revision <- Bib2
-key = "bibtexkey"
-name <- "refs_1"
-db_args = list()
-delete = FALSE
-add = FALSE
-update = FALSE
-main_table = "main_table"
-file_list = "file_list"
-
-
-Test <- read_pg(conn = conn, name = name)
-
-add_files = TRUE
-simplify = FALSE
-match_cols = FALSE
