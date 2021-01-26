@@ -8,4 +8,11 @@
 coverage](https://codecov.io/gh/kamapu/biblioDB/branch/master/graph/badge.svg)](https://codecov.io/gh/kamapu/biblioDB?branch=master)
 <!-- badges: end -->
 
-Package written for the interaccion with relational databases.
+This is an extension to the package
+[`biblio`](https://github.com/kamapu/biblio) including concepts of
+[JabRef](http://www.jabref.org/) and a relational database model
+implemented in PostgreSQL.
+
+Here the graphic of the model.
+
+Implementations for other SQL-Databases can be also implemented.
