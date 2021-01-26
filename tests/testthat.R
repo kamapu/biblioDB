@@ -7,3 +7,5 @@ library(biblio)
 library(biblioDB)
 
 test_check("biblioDB")
+
+# TODO: A test for print-method
