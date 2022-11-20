@@ -1,5 +1,5 @@
 # TODO:   Importing Open Access from own database
-# 
+#
 # Author: Miguel Alvarez
 ################################################################################
 
@@ -13,7 +13,7 @@ library(biblioDB)
 # Testing function write_pg
 Bib <- read_bib(x = "../Literatur_db/bib/MiguelReferences.bib")
 
-Bib <- Bib[c(1:100),]
+Bib <- Bib[c(1:100), ]
 
 # Connect postgres
 library(dbaccess)
@@ -35,30 +35,9 @@ write_pg(new_lib(), conn, "empty_list", match_cols = TRUE, overwrite = TRUE)
 library(readODS)
 library(RPostgreSQL)
 
-name = "references2021"
-df1 =Bib
-df2 = Bib_files
-main_table="main_table"
-file_list="file_list"
-overwrite=TRUE
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+name <- "references2021"
+df1 <- Bib
+df2 <- Bib_files
+main_table <- "main_table"
+file_list <- "file_list"
+overwrite <- TRUE

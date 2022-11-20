@@ -1,5 +1,5 @@
 # TODO:   Protocol for potential comparisson between two PG databases
-# 
+#
 # Author: Miguel Alvarez
 ################################################################################
 

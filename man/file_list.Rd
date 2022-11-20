@@ -3,35 +3,39 @@
 \name{file_list}
 \alias{file_list}
 \alias{file_list.lib_df}
-\alias{file_list<-}
-\alias{file_list<-,lib_df,data.frame-method}
+\alias{file_list,lib_df-method}
+\alias{file_list2string}
+\alias{file_list2string.data.frame}
+\alias{file_list2string,data.frame-method}
+\alias{file_list2string.lib_db}
+\alias{file_list2string,lib_db-method}
 \title{Description of files associated to entries in BibTeX databases}
 \usage{
 file_list(x, ...)
 
 \method{file_list}{lib_df}(x, ...)
 
-file_list(x, ...) <- value
+file_list2string(x, ...)
 
-\S4method{file_list}{lib_df,data.frame}(x, priority = "main text", ...) <- value
+\method{file_list2string}{data.frame}(x, ...)
+
+\method{file_list2string}{lib_db}(x, ...)
 }
 \arguments{
-\item{x}{An object of class \linkS4class{lib_df}, usually reference entries
-imported from a BibTeX databases by \code{\link[=read_bib]{read_bib()}}.}
+\item{x}{Either objects of class \linkS4class{lib_df}, \linkS4class{lib_db},
+or a data.frame, depending on function and method.
+The function \code{file_list()} applied to a \linkS4class{lib_df} object retrieves
+a data frame with the details of linked documents. The function
+\code{file_list2string()} will do the back conversion from a data frame to
+the string required by \strong{JabRef}.}
 
 \item{...}{Further parameters passed among methods.}
-
-\item{value}{A data frame listing files with respective bibtexkey and
-MIME-Type. In this table the columns 'bibtexkey', 'file', and 'mime' are
-mandatory. The occurrence of all bibtexkey values in 'value' will be
-cross-checked and eventually retrieve an error message.}
-
-\item{priority}{Character value. A keyword used as file description to define
-which is the main document in the entry. Files including this description
-will be listed first in the output bibtex file (JabRef style).}
 }
 \value{
-A data frame by \code{file_list()} or a \linkS4class{lib_df} object by \verb{file_list<-}.
+For \code{file_list()} applied to a \linkS4class{lib_df} object, a data frame.
+For \code{file_list2string()} applied to a data frame, a data frame with the
+columns \strong{bibtexkey} (the reference identifier) and \strong{file} (the respective
+string with linked files).
 }
 \description{
 Main documents as well as supplementary material may be linked to the
@@ -39,8 +43,4 @@ respective bibliographic entries in a BibTeX database. File names, MIME-types
 and descriptions are stored in a single column by JabRef, separating columns
 by colons and multiple files by semicolons. In a relational database, file
 information may be stored in a separated table and linked by bibtexkeys.
-
-The function \code{file_list()} produce this table, while the replace method
-\verb{file_list<-} will use such table to write the column 'file' in a
-\linkS4class{lib_df} object.
 }

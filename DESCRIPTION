@@ -7,21 +7,22 @@ Authors@R: c(
         role=c("aut","cre"), comment=c(ORCID="0000-0003-1500-1834"))
     )
 Depends:
-    R(>= 3.5.0),
-    biblio
+    R(>= 4.2),
+    biblio,
+    divDB
 Imports:
-	DBI,
-    methods,
-    readODS,
-    rpostgis,
-    RPostgreSQL
+    DBI,
+	methods,
+	RPostgreSQL,
+	stats
 Suggests:
     covr,
     devtools,
     rmarkdown,
     testthat
 Remotes:
-    github::kamapu/biblio
+    github::kamapu/biblio,
+    github::kamapu/divDB
 LazyData: true
 Description:
     Extension to the package 'biblio' for interacting with relational databases.
@@ -29,4 +30,11 @@ License: GPL (>= 2)
 URL: https://github.com/kamapu/biblioDB
 BugReports: https://github.com/kamapu/biblioDB/issues
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.1.9000
+RoxygenNote: 7.2.2
+Collate:
+    'imports.R'
+    'lib_db-class.R'
+    'openaccess-data.R'
+    'db2lib_db.R'
+    'file_list.R'
+    'coerce-methods.R'

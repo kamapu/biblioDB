@@ -1,5 +1,5 @@
 # TODO:   Add comment
-# 
+#
 # Author: Miguel Alvarez
 ################################################################################
 
@@ -11,7 +11,8 @@ install_github("kamapu/biblioDB", "update_pg")
 library(biblio)
 library(biblioDB)
 library(taxlist)
-library(dbaccess);library(RPostgreSQL)
+library(dbaccess)
+library(RPostgreSQL)
 
 # Produce example data sets
 Bib <- read_bib("../Literatur_db/bib/MiguelReferences.bib")
@@ -19,11 +20,14 @@ Bib <- read_bib("../Literatur_db/bib/MiguelReferences.bib")
 Bib2 <- Bib[500:510, ]
 Bib <- Bib[1:30, ]
 
-Bib3 <- Bib[-c(5,10,15), ]
+Bib3 <- Bib[-c(5, 10, 15), ]
 Bib3$journaltitle <- replace_x(Bib3$journaltitle,
-		old = c("J Biogeogr", "Mol Ecol", "Ecol Lett"),
-		new = c("Journal of Biogeography", "Molecular Ecology",
-				"Ecology Letters"))
+  old = c("J Biogeogr", "Mol Ecol", "Ecol Lett"),
+  new = c(
+    "Journal of Biogeography", "Molecular Ecology",
+    "Ecology Letters"
+  )
+)
 Bib2 <- do.call(rbind, list(Bib3, Bib2))
 
 compare_df(Bib, Bib2)
@@ -51,4 +55,3 @@ update(object = conn, revision = Bib2, name = "refs_1", add = TRUE)
 
 # Test update
 update(object = conn, revision = Bib2, name = "refs_1", update = TRUE)
-
