@@ -41,3 +41,5 @@ Collate:
     'file_list.R'
     'coerce-methods.R'
     'bib2database.R'
+    'compare_df.R'
+    'update_data.R'
