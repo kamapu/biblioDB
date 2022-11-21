@@ -14,7 +14,8 @@ Imports:
     DBI,
 	methods,
 	RPostgreSQL,
-	stats
+	stats,
+	taxlist
 Suggests:
     covr,
     devtools,
@@ -22,7 +23,8 @@ Suggests:
     testthat
 Remotes:
     github::kamapu/biblio,
-    github::kamapu/divDB
+    github::kamapu/divDB,
+    github::ropensci/taxlist
 LazyData: true
 Description:
     Extension to the package 'biblio' for interacting with relational databases.
@@ -38,3 +40,4 @@ Collate:
     'db2lib_db.R'
     'file_list.R'
     'coerce-methods.R'
+    'bib2database.R'
