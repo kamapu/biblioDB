@@ -52,3 +52,24 @@ setMethod(
     return(compare_df(x = x, y = y, ...))
   }
 )
+
+#' @rdname compare_df
+#' @aliases compare_df,lib_db,missing,missing-method
+setMethod(
+  "compare_df", signature(
+    x = "lib_db", y = "missing",
+    key = "missing"
+  ),
+  function(x, ...) {
+    if (is.null(x@dir$connection)) {
+      stop("Database connection is not set in input object.")
+    }
+    if (length(x@dir$schema) == 0) {
+      stop("Name of schema is missing in input object.")
+    }
+    return(compare_df(
+      x = x@dir$connection, y = x, schema = x@dir$schema,
+      ...
+    ))
+  }
+)

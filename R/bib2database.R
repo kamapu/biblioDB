@@ -131,10 +131,10 @@ setMethod(
   function(conn, schema, bib, ...) {
     bib2database(conn = conn, schema = schema, ...)
     dbWriteTable(conn, c(schema, "main_table"), bib@main_table,
-      row.names = FALSE
+      row.names = FALSE, append = TRUE
     )
     dbWriteTable(conn, c(schema, "file_list"), bib@file_list,
-      row.names = FALSE
+      row.names = FALSE, append = TRUE
     )
   }
 )
@@ -149,5 +149,26 @@ setMethod(
   function(conn, schema, bib, ...) {
     bib <- as(bib, "lib_db")
     bib2database(conn = conn, schema = schema, bib = bib, ...)
+  }
+)
+
+#' @rdname bib2database
+#' @aliases bib2database,lib_db,missing,missing-method
+setMethod(
+  "bib2database", signature(
+    conn = "lib_db",
+    schema = "missing", bib = "missing"
+  ),
+  function(conn, ...) {
+    if (is.null(conn@dir$connection)) {
+      stop("Database connection is not set in input object.")
+    }
+    if (length(conn@dir$schema) == 0) {
+      stop("Name of schema is missing in input object.")
+    }
+    bib2database(
+      conn = conn@dir$connection, schema = conn@dir$schema,
+      bib = conn, ...
+    )
   }
 )

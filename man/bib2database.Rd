@@ -5,6 +5,7 @@
 \alias{bib2database,PostgreSQLConnection,character,missing-method}
 \alias{bib2database,PostgreSQLConnection,character,lib_db-method}
 \alias{bib2database,PostgreSQLConnection,character,lib_df-method}
+\alias{bib2database,lib_db,missing,missing-method}
 \title{Create a database to store bibliographic references}
 \usage{
 bib2database(conn, schema, bib, ...)
@@ -14,6 +15,8 @@ bib2database(conn, schema, bib, ...)
 \S4method{bib2database}{PostgreSQLConnection,character,lib_db}(conn, schema, bib, ...)
 
 \S4method{bib2database}{PostgreSQLConnection,character,lib_df}(conn, schema, bib, ...)
+
+\S4method{bib2database}{lib_db,missing,missing}(conn, schema, bib, ...)
 }
 \arguments{
 \item{conn}{A database connection.}

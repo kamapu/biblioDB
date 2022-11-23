@@ -7,15 +7,7 @@
 \usage{
 db2lib_db(conn, ...)
 
-\method{db2lib_db}{PostgreSQLConnection}(
-  conn,
-  name,
-  main_table = "main_table",
-  file_list = "file_list",
-  file_folder,
-  simplify = FALSE,
-  ...
-)
+\method{db2lib_db}{PostgreSQLConnection}(conn, schema, file_folder, simplify = FALSE, ...)
 }
 \arguments{
 \item{conn}{A connection retrieved either by \code{\link[=dbConnect]{dbConnect()}}
@@ -23,17 +15,10 @@ or \code{\link[=connect_db]{connect_db()}}.}
 
 \item{...}{Further arguments passed among methods.}
 
-\item{name}{A character value with the name of the schema containing the
+\item{schema}{A character value with the name of the schema containing the
 main table and the file list. If the length is 2, the first value will be
 assumed as the schema for the main table and the second, for the file
 list. If the length is 1, the value will be recycled.}
-
-\item{main_table}{A character value indicating the name of the main table in
-in the schema 'name'.}
-
-\item{file_list}{A character value indicating the name of the table in schema
-'name', which contains the names of the files and the respective
-attributes. It can be cancelled by \code{'file_list = NULL'}.}
 
 \item{file_folder}{A character value showing the path to the linked documents
 (i.e. PDF files of publications).}
@@ -45,6 +30,6 @@ skipped from output or not.}
 A \linkS4class{lib_db} object.
 }
 \description{
-Databases tabulated in PostgreSQL will be imported into a \linkS4class{lib_df}
+Databases tabulated in PostgreSQL will be imported into a \linkS4class{lib_db}
 object.
 }

@@ -43,3 +43,4 @@ Collate:
     'bib2database.R'
     'compare_df.R'
     'update_data.R'
+    'check_files.R'

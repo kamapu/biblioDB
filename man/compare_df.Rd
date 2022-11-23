@@ -4,11 +4,14 @@
 \alias{compare_df}
 \alias{compare_df,PostgreSQLConnection,lib_db,missing-method}
 \alias{compare_df,PostgreSQLConnection,lib_df,missing-method}
+\alias{compare_df,lib_db,missing,missing-method}
 \title{Compare database tables with electronic libraries}
 \usage{
 \S4method{compare_df}{PostgreSQLConnection,lib_db,missing}(x, y, schema, ...)
 
 \S4method{compare_df}{PostgreSQLConnection,lib_df,missing}(x, y, key, ...)
+
+\S4method{compare_df}{lib_db,missing,missing}(x, y, key, ...)
 }
 \arguments{
 \item{x}{A \linkS4class{PostgreSQLConnection} connecting to a database.}

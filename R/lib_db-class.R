@@ -30,8 +30,7 @@ setClass("lib_db",
     dir = list(
       folder = character(0),
       connection = NULL,
-      main_table = character(0),
-      file_list = character(0)
+      schema = character(0)
     ),
     main_table = {
       mt <- data.frame(bibtexkey = character(0))
@@ -46,7 +45,7 @@ setClass("lib_db",
   ),
   validity = function(object) {
     # Mandatory names in dir
-    d_names <- c("folder", "connection")
+    d_names <- c("folder", "connection", "schema")
     if (!all(d_names %in% names(object@dir))) {
       d_names <- d_names[!d_names %in% names(object@dir)]
       return(paste0(

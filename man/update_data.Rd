@@ -4,6 +4,7 @@
 \alias{update_data}
 \alias{update_data,PostgreSQLConnection,lib_db,missing-method}
 \alias{update_data,PostgreSQLConnection,lib_df,missing-method}
+\alias{update_data,lib_db,missing,missing-method}
 \title{Update database from edited electronic libraries}
 \usage{
 \S4method{update_data}{PostgreSQLConnection,lib_db,missing}(
@@ -17,6 +18,8 @@
 )
 
 \S4method{update_data}{PostgreSQLConnection,lib_df,missing}(object, revision, schema, ...)
+
+\S4method{update_data}{lib_db,missing,missing}(object, revision, key, ...)
 }
 \arguments{
 \item{object}{A connection to a database.}
@@ -32,6 +35,8 @@ action have to be taken or not. If all \code{FALSE}, only a comparison by
 \code{\link[=compare_df]{compare_df()}} will be carried out.}
 
 \item{...}{Further arguments passed among methods.}
+
+\item{key}{Not used in these methods.}
 }
 \description{
 Electronic libraries managed as bibTeX files can be stored and synchronized
