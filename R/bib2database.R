@@ -130,6 +130,11 @@ setMethod(
   ),
   function(conn, schema, bib, ...) {
     bib2database(conn = conn, schema = schema, ...)
+    for (i in names(bib@main_table)) {
+      bib@main_table[[i]] <- gsub("'", "''", bib@main_table[[i]],
+        fixed = TRUE
+      )
+    }
     dbWriteTable(conn, c(schema, "main_table"), bib@main_table,
       row.names = FALSE, append = TRUE
     )
