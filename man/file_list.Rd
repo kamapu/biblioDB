@@ -22,17 +22,17 @@ file_list2string(x, ...)
 \method{file_list2string}{lib_db}(x, ...)
 }
 \arguments{
-\item{x}{Either objects of class \linkS4class{lib_df}, \linkS4class{lib_db},
+\item{x}{Either objects of class \link[biblio:lib_df-class]{biblio::lib_df}, \linkS4class{lib_db},
 or a data.frame, depending on function and method.
-The function \code{file_list()} applied to a \linkS4class{lib_df} object retrieves
-a data frame with the details of linked documents. The function
+The function \code{file_list()} applied to a \link[biblio:lib_df-class]{biblio::lib_df} object
+retrieves a data frame with the details of linked documents. The function
 \code{file_list2string()} will do the back conversion from a data frame to
 the string required by \strong{JabRef}.}
 
 \item{...}{Further parameters passed among methods.}
 }
 \value{
-For \code{file_list()} applied to a \linkS4class{lib_df} object, a data frame.
+For \code{file_list()} applied to a \link[biblio:lib_df-class]{biblio::lib_df} object, a data frame.
 For \code{file_list2string()} applied to a data frame, a data frame with the
 columns \strong{bibtexkey} (the reference identifier) and \strong{file} (the respective
 string with linked files).

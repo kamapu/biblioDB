@@ -14,10 +14,11 @@
 \S4method{compare_df}{lib_db,missing,missing}(x, y, key, ...)
 }
 \arguments{
-\item{x}{A \linkS4class{PostgreSQLConnection} connecting to a database.}
+\item{x}{A \link[RPostgreSQL:PostgreSQLConnection-class]{RPostgreSQL::PostgreSQLConnection} connecting to a
+database.}
 
-\item{y}{Either a \linkS4class{lib_df} or \linkS4class{lib_db} object including the
-reviewed version of the electronic library.}
+\item{y}{Either a \link[biblio:lib_df-class]{biblio::lib_df} or \linkS4class{lib_db} object including
+the reviewed version of the electronic library.}
 
 \item{schema}{A character value with the name of the schema in database
 containing the respective tables.}
@@ -27,8 +28,8 @@ containing the respective tables.}
 \item{key}{Not required in these methods.}
 }
 \value{
-Either a \linkS4class{comp_df} or a \linkS4class{comp_list} object, depending on the
-used method.
+Either a \link[biblio:comp_df-class]{biblio::comp_df} or a \link[divDB:comp_list-class]{divDB::comp_list} object,
+depending on the used method.
 }
 \description{
 Comparing database content with edited files.

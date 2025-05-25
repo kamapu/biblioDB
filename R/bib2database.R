@@ -5,16 +5,19 @@
 #'
 #' @description
 #' A relational data model to create a storage of bibliographic references
-#' (electronic library) from [lib_df-class] objects.
+#' (electronic library) from [biblio::lib_df-class] objects.
 #'
 #' @param conn A database connection.
 #' @param schema A character value with the name of the schema where tables
 #'     will get stored. If the schema does not exist in the database, it will
 #'     be created by this function.
-#' @param bib A [lib_df-class] or [lib_db-class] object. If missing, an empty
-#'     database will be created.
+#' @param bib A [biblio::lib_df-class] or [lib_db-class] object. If missing,
+#'     an empty database will be created.
 #' @param comment A character value with the comment (description) assigned to
 #'     the created schema.
+#' @param eval A logical value, whether the resulting SQL commands should be
+#'     executed or not. This may be usefull if the target is retrieving SQL
+#'     scripts for further execution.
 #' @param ... Further arguments passed among methods.
 #'
 #' @exportMethod bib2database
@@ -32,7 +35,7 @@ setMethod(
     conn = "PostgreSQLConnection",
     schema = "character", bib = "missing"
   ),
-  function(conn, schema, comment = "", ...) {
+  function(conn, schema, comment = "", eval = TRUE, ...) {
     if (dbExistsTable(conn, c(schema, "main_table"))) {
       stop(paste0(
         "Table 'main_table' already existing in schema '", schema,
@@ -116,8 +119,11 @@ setMethod(
       query_comm_fl
     )
     class(query) <- c("sql", "character")
-    # Send the query
-    dbSendQuery(conn, query)
+    if (eval) {
+      dbSendQuery(conn, query)
+      message("DONE!")
+    }
+    invisible(query)
   }
 )
 
@@ -128,19 +134,25 @@ setMethod(
     conn = "PostgreSQLConnection",
     schema = "character", bib = "lib_db"
   ),
-  function(conn, schema, bib, ...) {
-    bib2database(conn = conn, schema = schema, ...)
+  function(conn, schema, bib, eval = TRUE, ...) {
+    query <- bib2database(conn = conn, schema = schema, eval = FALSE)
     for (i in names(bib@main_table)) {
       bib@main_table[[i]] <- gsub("'", "''", bib@main_table[[i]],
         fixed = TRUE
       )
     }
-    dbWriteTable(conn, c(schema, "main_table"), bib@main_table,
-      row.names = FALSE, append = TRUE
-    )
-    dbWriteTable(conn, c(schema, "file_list"), bib@file_list,
-      row.names = FALSE, append = TRUE
-    )
+    query <- c(query, insert_rows(conn, bib@main_table, c(schema, "main_table"),
+      eval = FALSE
+    ))
+    query <- c(query, insert_rows(conn, bib@file_list, c(schema, "file_list"),
+      eval = FALSE
+    ))
+    class(query) <- c("sql", "character")
+    if (eval) {
+      dbSendQuery(conn, query)
+      message("DONE!")
+    }
+    invisible(query)
   }
 )
 
@@ -151,9 +163,14 @@ setMethod(
     conn = "PostgreSQLConnection",
     schema = "character", bib = "lib_df"
   ),
-  function(conn, schema, bib, ...) {
+  function(conn, schema, bib, eval = TRUE, ...) {
     bib <- as(bib, "lib_db")
-    bib2database(conn = conn, schema = schema, bib = bib, ...)
+    query <- bib2database(conn = conn, schema = schema, bib = bib, eval = FALSE)
+    if (eval) {
+      dbSendQuery(conn, query)
+      message("DONE!")
+    }
+    invisible(query)
   }
 )
 
@@ -164,16 +181,21 @@ setMethod(
     conn = "lib_db",
     schema = "missing", bib = "missing"
   ),
-  function(conn, ...) {
+  function(conn, eval = TRUE, ...) {
     if (is.null(conn@dir$connection)) {
       stop("Database connection is not set in input object.")
     }
     if (length(conn@dir$schema) == 0) {
       stop("Name of schema is missing in input object.")
     }
-    bib2database(
+    query <- bib2database(
       conn = conn@dir$connection, schema = conn@dir$schema,
-      bib = conn, ...
+      bib = conn, eval = FALSE
     )
+    if (eval) {
+      dbSendQuery(conn, query)
+      message("DONE!")
+    }
+    invisible(query)
   }
 )

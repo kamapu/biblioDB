@@ -11,6 +11,7 @@
   object,
   revision,
   schema,
+  eval = TRUE,
   add = FALSE,
   delete = FALSE,
   update = FALSE,
@@ -24,11 +25,15 @@
 \arguments{
 \item{object}{A connection to a database.}
 
-\item{revision}{An electronic library, either as \linkS4class{lib_df} or
+\item{revision}{An electronic library, either as \link[biblio:lib_df-class]{biblio::lib_df} or
 \linkS4class{lib_db} object.}
 
 \item{schema}{A character value indicating the schema containing the
 respective tables.}
+
+\item{eval}{A logical value, whether the resulting SQL commands should be
+executed or not. This may be usefull if the target is retrieving SQL
+scripts for further execution.}
 
 \item{add, delete, update}{A logical value indicating whether the respective
 action have to be taken or not. If all \code{FALSE}, only a comparison by
@@ -37,6 +42,11 @@ action have to be taken or not. If all \code{FALSE}, only a comparison by
 \item{...}{Further arguments passed among methods.}
 
 \item{key}{Not used in these methods.}
+}
+\value{
+If all of add, delete and update are FALSE, this function returns an object
+of class \link[divDB:comp_list-class]{divDB::comp_list}.
+Otherwise, it returns an invisible \link[divDB:sql-class]{divDB::sql} object.
 }
 \description{
 Electronic libraries managed as bibTeX files can be stored and synchronized

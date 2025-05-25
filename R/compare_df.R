@@ -6,17 +6,18 @@
 #' @description
 #' Comparing database content with edited files.
 #'
-#' @param x A [PostgreSQLConnection-class] connecting to a database.
-#' @param y Either a [lib_df-class] or [lib_db-class] object including the
-#'     reviewed version of the electronic library.
+#' @param x A [RPostgreSQL::PostgreSQLConnection-class] connecting to a
+#'     database.
+#' @param y Either a [biblio::lib_df-class] or [lib_db-class] object including
+#'     the reviewed version of the electronic library.
 #' @param key Not required in these methods.
 #' @param schema A character value with the name of the schema in database
 #'     containing the respective tables.
 #' @param ... Further arguments passed among methods.
 #'
 #' @return
-#' Either a [comp_df-class] or a [comp_list-class] object, depending on the
-#' used method.
+#' Either a [biblio::comp_df-class] or a [divDB::comp_list-class] object,
+#' depending on the used method.
 #'
 #' @aliases compare_df,PostgreSQLConnection,lib_db,missing-method
 #' @exportMethod compare_df

@@ -8,8 +8,8 @@
 #' Databases tabulated in PostgreSQL will be imported into a [lib_db-class]
 #' object.
 #'
-#' @param conn A connection retrieved either by [dbConnect()]
-#'     or [connect_db()].
+#' @param conn A connection retrieved either by [DBI::dbConnect()]
+#'     or [divDB::connect_db()].
 #' @param schema A character value with the name of the schema containing the
 #'     main table and the file list. If the length is 2, the first value will be
 #'     assumed as the schema for the main table and the second, for the file

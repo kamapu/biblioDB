@@ -6,7 +6,7 @@
 \alias{openaccess}
 \title{A BibTeX database with three open access publications}
 \format{
-An object of class \linkS4class{lib_df}.
+An object of class \link[biblio:lib_df-class]{biblio::lib_df}.
 }
 \usage{
 openaccess
@@ -19,6 +19,5 @@ BibTeX database with associated PDF files.
 \examples{
 data(openaccess)
 openaccess
-
 }
 \keyword{datasets}
