@@ -48,76 +48,43 @@ setMethod(
         "'"
       ))
     }
-    # Modify internal tables
-    tags_bib <- bib_tags$tags_bib[bib_tags$tags_bib$field != "file", ]
-    tags_bib$description <- gsub("'", "''", tags_bib$description,
-      fixed = TRUE
-    )
-    file_list <- bib_tags$file_list
-    file_list$description <- gsub("'", "''", file_list$description,
-      fixed = TRUE
-    )
-    # Create schema
-    query <- paste0("create schema if not exists \"", schema, "\"")
-    # Create main table
-    query_mt <- replace_idx(
-      x = rep("text", nrow(tags_bib)),
-      idx1 = tags_bib$field,
-      idx2 = "bibtexkey",
-      new = "text primary key"
-    )
-    query_mt <- paste(tags_bib$field, query_mt)
-    query_mt <- paste0(query_mt, collapse = ",\n")
-    query_mt <- paste0(c(
-      paste0("create table \"", schema, "\".main_table"),
-      "(", query_mt, ")"
-    ), collapse = "\n")
-    # Create file list
-    query_fl <- replace_idx(
-      x = rep("text", nrow(file_list)),
-      idx1 = file_list$field,
-      idx2 = c("file", "bibtexkey"),
-      new = c(
-        "text primary key",
-        paste0(
-          "text references \"", schema,
-          "\".main_table (bibtexkey)"
-        )
-      )
-    )
-    query_fl <- paste(file_list$field, query_fl)
-    query_fl <- paste0(query_fl, collapse = ",\n")
-    query_fl <- paste0(c(
-      paste0("create table \"", schema, "\".file_list"),
-      "(", query_fl, ")"
-    ), collapse = "\n")
-    # Comment on schema
-    query_comm_sc <- c(paste0(
-      "comment on schema \"", schema, "\" is '",
-      comment, "'"
+    query <- character(0)
+    # Create tables
+    query <- c(query, paste(
+      "create table", paste0(schema, ".main_table"),
+      "()"
     ))
-    # Comment on tables
-    query_comm_tabs <- c(paste0(
-      "comment on table \"", schema, "\".",
-      c("main_table", "file_list"), " is '",
-      c("Main entry table", "List of stored files"), ".'"
+    query <- c(query, paste(
+      "create table", paste0(schema, ".file_list"),
+      "()"
     ))
-    # Comment on columns
-    query_comm_mt <- c(paste0(
-      "comment on column \"", schema,
-      "\".main_table.\"", tags_bib$field, "\" is '",
-      tags_bib$description, "'"
+    # Add columns to main table
+    def_main_table <- bib_tags$tags_bib[, c("field", "description")]
+    names(def_main_table) <- c("name", "comment")
+    def_main_table$type <- "text"
+    def_main_table$type[def_main_table$name == "bibtexkey"] <-
+        "text primary key"
+    query <- c(query, add_columns(conn,
+      df = def_main_table,
+      name = c(schema, "main_table"), eval = FALSE
     ))
-    query_comm_fl <- c(paste0(
-      "comment on column \"", schema,
-      "\".file_list.\"", file_list$field, "\" is '",
-      file_list$description, "'"
+    # Add columns to file list
+    def_file_list <- bib_tags$file_list[, c("field", "description")]
+    names(def_file_list) <- c("name", "comment")
+    def_file_list$type <- "text"
+    def_file_list <- do.call(rbind, list(def_file_list,
+          data.frame(name = "file_id", comment = "Identifier for file entry.",
+              type = "serial primary key")))
+    query <- c(query, add_columns(conn,
+      df = def_file_list,
+      name = c(schema, "file_list"), eval = FALSE
     ))
-    # All query in one
-    query <- c(
-      query, query_mt, query_fl, query_comm_sc, query_comm_mt,
-      query_comm_fl
-    )
+    # Foreign key
+    query <- c(query, paste0(
+      "alter table ", schema, ".file_list\n",
+      "add constraint fk_bibtexkey foreign key (bibtexkey) ",
+      "references ", schema, ".main_table (bibtexkey)"
+    ))
     class(query) <- c("sql", "character")
     if (eval) {
       dbSendQuery(conn, query)
@@ -126,6 +93,10 @@ setMethod(
     invisible(query)
   }
 )
+
+
+
+
 
 #' @rdname bib2database
 #' @aliases bib2database,PostgreSQLConnection,character,lib_db-method
@@ -155,6 +126,10 @@ setMethod(
     invisible(query)
   }
 )
+
+
+
+
 
 #' @rdname bib2database
 #' @aliases bib2database,PostgreSQLConnection,character,lib_df-method
