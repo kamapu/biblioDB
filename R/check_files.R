@@ -11,6 +11,8 @@
 #' @param obj A [lib_db-class] object including the path.
 #' @param ... Further arguments passed among methods.
 #'
+#' @example examples/check_files.R
+#'
 #' @export
 check_files <- function(obj, ...) {
   UseMethod("check_files", obj)

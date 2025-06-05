@@ -10,16 +10,16 @@
 #' by colons and multiple files by semicolons. In a relational database, file
 #' information may be stored in a separated table and linked by bibtexkeys.
 #'
-#' @param x Either objects of class [lib_df-class], [lib_db-class],
+#' @param x Either objects of class [biblio::lib_df-class], [lib_db-class],
 #'     or a data.frame, depending on function and method.
-#'     The function `file_list()` applied to a [lib_df-class] object retrieves
-#'     a data frame with the details of linked documents. The function
+#'     The function `file_list()` applied to a [biblio::lib_df-class] object
+#'     retrieves a data frame with the details of linked documents. The function
 #'     `file_list2string()` will do the back conversion from a data frame to
 #'     the string required by **JabRef**.
 #' @param ... Further parameters passed among methods.
 #'
 #' @return
-#' For `file_list()` applied to a [lib_df-class] object, a data frame.
+#' For `file_list()` applied to a [biblio::lib_df-class] object, a data frame.
 #' For `file_list2string()` applied to a data frame, a data frame with the
 #' columns **bibtexkey** (the reference identifier) and **file** (the respective
 #' string with linked files).

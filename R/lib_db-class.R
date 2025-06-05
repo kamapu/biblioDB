@@ -4,12 +4,12 @@
 #' @title Class lib_db.
 #'
 #' @description
-#' A class created as intermediate format between [lib_df-class] objects and a
-#' database.
+#' A class created as intermediate format between [biblio::lib_df-class] objects
+#' and a database.
 #'
 #' @slot dir A list including the folder containing files and a connection to
 #'     a database.
-#' @slot main_table A [lib_df-class] object.
+#' @slot main_table A [biblio::lib_df-class] object.
 #' @slot file_list A data frame with a list of files associated to a library
 #'     entry.
 #' @slot relations A list with data frames related to single columns in

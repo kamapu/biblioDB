@@ -10,8 +10,8 @@ db2lib_db(conn, ...)
 \method{db2lib_db}{PostgreSQLConnection}(conn, schema, file_folder, simplify = FALSE, ...)
 }
 \arguments{
-\item{conn}{A connection retrieved either by \code{\link[=dbConnect]{dbConnect()}}
-or \code{\link[=connect_db]{connect_db()}}.}
+\item{conn}{A connection retrieved either by \code{\link[DBI:dbConnect]{DBI::dbConnect()}}
+or \code{\link[divDB:connect_db]{divDB::connect_db()}}.}
 
 \item{...}{Further arguments passed among methods.}
 

@@ -8,10 +8,8 @@
 #' [Biodiversity Data Journal](https://bdj.pensoft.net/) as example of a
 #' BibTeX database with associated PDF files.
 #'
-#' @format An object of class [lib_df-class].
+#' @format An object of class [biblio::lib_df-class].
 #'
-#' @examples
-#' data(openaccess)
-#' openaccess
+#' @example examples/openaccess.R
 #'
 "openaccess"

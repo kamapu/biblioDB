@@ -4,29 +4,47 @@
 ################################################################################
 
 library(biblioDB)
-## library(RPostgreSQL)
 
-bibl <- read_bib("../../db-dumps/literatur_db/bib/MiguelReferences.bib")
-bibl_new <- as(bibl, "lib_db")
+# Load reference lists
+bibrefs <- read_bib(file.path(path.package("biblio"), "LuebertPliscoff.bib"))
+bibl_new <- as(bibrefs[1:10, ], "lib_db")
+
+# Create database
+cred <- credentials()
+db_name <- "postgres"
+
+conn <- connect_db(db_name, user = cred["user"], password = cred["password"])
+
+# Drop database if exists
+RPostgres::dbSendQuery(conn, "drop database if exists test_bibrefs")
+RPostgres::dbSendQuery(conn, "create database test_bibrefs")
 
 # complete metadata
 bibl_new@dir$schema <- "bib_references"
-bibl_new@dir$folder <- "../../db-dumps/literatur_db/soft-copies"
-bibl_new@dir$connection <- connect_db("example_db", user = "miguel")
+#bibl_new@dir$folder <- "../../db-dumps/literatur_db/soft-copies"
+bibl_new@dir$connection <- connect_db("test_bibrefs", user = cred["user"],
+    password = cred["password"])
 
 # check-files
-Files <- check_files(bibl_new)
+#Files <- check_files(bibl_new)
 
 # New database -----------------------------------------------------------------
 
 # Drop Schema if exists
-dbSendQuery(bibl_new@dir$connection,
-    "drop schema if exists bib_references cascade")
 dbSendQuery(bibl_new@dir$connection, "create schema bib_references")
 
 # Create database
-bibl_new <- as(bibl[1:100, ], "lib_db")
-bib2database(bibl_new)
+query <- bib2database(bibl_new, eval = FALSE)
+
+
+
+
+
+
+
+
+
+
 
 bibl_new@dir$connection <- connect_db("example_db", user = "miguel")
 bib2database(bibl_new)

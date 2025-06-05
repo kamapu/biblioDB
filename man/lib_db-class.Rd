@@ -6,8 +6,8 @@
 \alias{lib_db}
 \title{Class lib_db.}
 \description{
-A class created as intermediate format between \linkS4class{lib_df} objects and a
-database.
+A class created as intermediate format between \link[biblio:lib_df-class]{biblio::lib_df} objects
+and a database.
 }
 \section{Slots}{
 
@@ -15,7 +15,7 @@ database.
 \item{\code{dir}}{A list including the folder containing files and a connection to
 a database.}
 
-\item{\code{main_table}}{A \linkS4class{lib_df} object.}
+\item{\code{main_table}}{A \link[biblio:lib_df-class]{biblio::lib_df} object.}
 
 \item{\code{file_list}}{A data frame with a list of files associated to a library
 entry.}

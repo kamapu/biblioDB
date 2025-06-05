@@ -2,6 +2,7 @@
 ^\.dbeaver$
 ^data-raw$
 ^build-pkg$
+^examples$
 ^lab$
 ^README\.Rmd$
 ^README\.md$

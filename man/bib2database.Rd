@@ -10,13 +10,13 @@
 \usage{
 bib2database(conn, schema, bib, ...)
 
-\S4method{bib2database}{PostgreSQLConnection,character,missing}(conn, schema, comment = "", ...)
+\S4method{bib2database}{PostgreSQLConnection,character,missing}(conn, schema, comment = "", eval = TRUE, ...)
 
-\S4method{bib2database}{PostgreSQLConnection,character,lib_db}(conn, schema, bib, ...)
+\S4method{bib2database}{PostgreSQLConnection,character,lib_db}(conn, schema, bib, eval = TRUE, ...)
 
-\S4method{bib2database}{PostgreSQLConnection,character,lib_df}(conn, schema, bib, ...)
+\S4method{bib2database}{PostgreSQLConnection,character,lib_df}(conn, schema, bib, eval = TRUE, ...)
 
-\S4method{bib2database}{lib_db,missing,missing}(conn, schema, bib, ...)
+\S4method{bib2database}{lib_db,missing,missing}(conn, eval = TRUE, ...)
 }
 \arguments{
 \item{conn}{A database connection.}
@@ -25,15 +25,19 @@ bib2database(conn, schema, bib, ...)
 will get stored. If the schema does not exist in the database, it will
 be created by this function.}
 
-\item{bib}{A \linkS4class{lib_df} or \linkS4class{lib_db} object. If missing, an empty
-database will be created.}
+\item{bib}{A \link[biblio:lib_df-class]{biblio::lib_df} or \linkS4class{lib_db} object. If missing,
+an empty database will be created.}
 
 \item{...}{Further arguments passed among methods.}
 
 \item{comment}{A character value with the comment (description) assigned to
 the created schema.}
+
+\item{eval}{A logical value, whether the resulting SQL commands should be
+executed or not. This may be usefull if the target is retrieving SQL
+scripts for further execution.}
 }
 \description{
 A relational data model to create a storage of bibliographic references
-(electronic library) from \linkS4class{lib_df} objects.
+(electronic library) from \link[biblio:lib_df-class]{biblio::lib_df} objects.
 }
