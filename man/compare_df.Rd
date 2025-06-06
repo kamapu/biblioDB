@@ -2,14 +2,15 @@
 % Please edit documentation in R/compare_df.R
 \name{compare_df}
 \alias{compare_df}
-\alias{compare_df,PostgreSQLConnection,lib_db,missing-method}
-\alias{compare_df,PostgreSQLConnection,lib_df,missing-method}
+\alias{compare_df,PostgreSQLConnection,lib_db,character-method}
+\alias{compare_df,PostgreSQLConnection,lib_df,character-method}
 \alias{compare_df,lib_db,missing,missing-method}
+\alias{compare_df,lib_db,missing,character-method}
 \title{Compare database tables with electronic libraries}
 \usage{
-\S4method{compare_df}{PostgreSQLConnection,lib_db,missing}(x, y, schema, ...)
+\S4method{compare_df}{PostgreSQLConnection,lib_db,character}(x, y, schema, key = "bibtexkey", ...)
 
-\S4method{compare_df}{PostgreSQLConnection,lib_df,missing}(x, y, key, ...)
+\S4method{compare_df}{PostgreSQLConnection,lib_df,character}(x, y, key = "bibtexkey", ...)
 
 \S4method{compare_df}{lib_db,missing,missing}(x, y, key, ...)
 }
@@ -23,9 +24,9 @@ the reviewed version of the electronic library.}
 \item{schema}{A character value with the name of the schema in database
 containing the respective tables.}
 
-\item{...}{Further arguments passed among methods.}
-
 \item{key}{Not required in these methods.}
+
+\item{...}{Further arguments passed among methods.}
 }
 \value{
 Either a \link[biblio:comp_df-class]{biblio::comp_df} or a \link[divDB:comp_list-class]{divDB::comp_list} object,

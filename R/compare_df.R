@@ -19,43 +19,45 @@
 #' Either a [biblio::comp_df-class] or a [divDB::comp_list-class] object,
 #' depending on the used method.
 #'
-#' @aliases compare_df,PostgreSQLConnection,lib_db,missing-method
+#' @aliases compare_df,PostgreSQLConnection,lib_db,character-method
 #' @exportMethod compare_df
 setMethod(
   "compare_df", signature(
     x = "PostgreSQLConnection", y = "lib_db",
-    key = "missing"
+    key = "character"
   ),
-  function(x, y, schema, ...) {
+  function(x, y, schema, key = "bibtexkey", ...) {
     c_list <- list()
     c_list$main_table <- compare_df(
-      x = x, y = y@main_table, key = "bibtexkey",
+      x = x, y = as(y@main_table, "data.frame"), key = key,
       name = c(schema, "main_table"), ...
     )
-    c_list$file_list <- compare_df(
-      x = x, y = y@file_list, key = "file",
-      name = c(schema, "file_list"), ...
-    )
+    if (!is.null(y@file_list)) {
+      c_list$file_list <- compare_df(
+        x = x, y = y@file_list, key = "file",
+        name = c(schema, "file_list"), ...
+      )
+    }
     class(c_list) <- c("comp_list", "list")
     return(c_list)
   }
 )
 
 #' @rdname compare_df
-#' @aliases compare_df,PostgreSQLConnection,lib_df,missing-method
+#' @aliases compare_df,PostgreSQLConnection,lib_df,character-method
 setMethod(
   "compare_df", signature(
     x = "PostgreSQLConnection", y = "lib_df",
-    key = "missing"
+    key = "character"
   ),
-  function(x, y, ...) {
+  function(x, y, key = "bibtexkey", ...) {
     y <- as(y, "lib_db")
-    return(compare_df(x = x, y = y, ...))
+    return(compare_df(x = x, y = y, key = key, ...))
   }
 )
 
 #' @rdname compare_df
-#' @aliases compare_df,lib_db,missing,missing-method
+#' @aliases compare_df,lib_db,missing,character-method
 setMethod(
   "compare_df", signature(
     x = "lib_db", y = "missing",
@@ -69,7 +71,7 @@ setMethod(
       stop("Name of schema is missing in input object.")
     }
     return(compare_df(
-      x = x@dir$connection, y = x, schema = x@dir$schema,
+      x = x@dir$connection, y = x, schema = x@dir$schema, key = "bibtexkey",
       ...
     ))
   }
