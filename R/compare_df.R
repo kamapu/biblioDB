@@ -10,7 +10,7 @@
 #'     database.
 #' @param y Either a [biblio::lib_df-class] or [lib_db-class] object including
 #'     the reviewed version of the electronic library.
-#' @param key Not required in these methods.
+#' @param key Not required in these methods (it is fixed as "bibtexkey").
 #' @param schema A character value with the name of the schema in database
 #'     containing the respective tables.
 #' @param ... Further arguments passed among methods.
@@ -19,17 +19,17 @@
 #' Either a [biblio::comp_df-class] or a [divDB::comp_list-class] object,
 #' depending on the used method.
 #'
-#' @aliases compare_df,PostgreSQLConnection,lib_db,character-method
+#' @aliases compare_df,PostgreSQLConnection,lib_db,missing-method
 #' @exportMethod compare_df
 setMethod(
   "compare_df", signature(
     x = "PostgreSQLConnection", y = "lib_db",
-    key = "character"
+    key = "missing"
   ),
-  function(x, y, schema, key = "bibtexkey", ...) {
+  function(x, y, schema, ...) {
     c_list <- list()
     c_list$main_table <- compare_df(
-      x = x, y = as(y@main_table, "data.frame"), key = key,
+      x = x, y = as(y@main_table, "data.frame"), key = "bibtexkey",
       name = c(schema, "main_table"), ...
     )
     if (!is.null(y@file_list)) {
@@ -44,20 +44,20 @@ setMethod(
 )
 
 #' @rdname compare_df
-#' @aliases compare_df,PostgreSQLConnection,lib_df,character-method
+#' @aliases compare_df,PostgreSQLConnection,lib_df,missing-method
 setMethod(
   "compare_df", signature(
     x = "PostgreSQLConnection", y = "lib_df",
-    key = "character"
+    key = "missing"
   ),
-  function(x, y, key = "bibtexkey", ...) {
+  function(x, y, ...) {
     y <- as(y, "lib_db")
-    return(compare_df(x = x, y = y, key = key, ...))
+    return(compare_df(x = x, y = y, key = "bibtexkey", ...))
   }
 )
 
 #' @rdname compare_df
-#' @aliases compare_df,lib_db,missing,character-method
+#' @aliases compare_df,lib_db,missing,missing-method
 setMethod(
   "compare_df", signature(
     x = "lib_db", y = "missing",

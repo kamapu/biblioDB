@@ -18,7 +18,7 @@ bib2database(conn, "bibrefs_update", bibrefs[1:5, ])
 
 # Reviewed version
 bib_reviewed <- bibrefs[2:7, ]
-bib_reviewed$author[bib_reviewed$bibtexkey == "pliscoff2006"] <- "anclassonymous"
+bib_reviewed$author[bib_reviewed$bibtexkey == "pliscoff2006"] <- "anonymous"
 
 # Do comparison
 compare_df(conn, bib_reviewed, "bibrefs_update")
