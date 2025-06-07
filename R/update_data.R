@@ -40,58 +40,20 @@ setMethod(
     if (all(!c(add, delete, update))) {
       return(compare_df(object, revision, schema = schema))
     } else {
-      query <- character(0)
-      if (update) {
-        query <- c(
-          query,
-          update_data(
-            object = object, revision = as(revision@main_table, "data.frame"),
-            key = "bibtexkey", name = c(schema, "main_table"), eval = FALSE,
-            update = update
-          )
-        )
-        if (!is.null(revision@file_list)) {
-          query <- c(
-            query,
-            update_data(
-              object = object, revision = revision@file_list,
-              key = "file", name = c(schema, "file_list"), eval = FALSE,
-              update = update
-            )
-          )
-        }
+      query <- update_data(object, as(revision@main_table, "data.frame"),
+        key = "bibtexkey",
+        name = c(schema, "main_table"), eval = FALSE, add = add,
+        delete = delete, update = update, ...
+      )
+      if (!is.null(revision@file_list)) {
+        query <- c(query, update_data(object,
+          as(revision@file_list, "data.frame"),
+          key = "file",
+          name = c(schema, "file_list"), eval = FALSE, add = add,
+          delete = delete, update = update, ...
+        ))
       }
-      if (add) {
-        query <- c(
-          query,
-          update_data(
-            object = object, revision = revision@main_table,
-            key = "bibtexkey", name = c(schema, "main_table"), eval = FALSE,
-            add = add
-          ),
-          update_data(
-            object = object, revision = revision@file_list,
-            key = "file", name = c(schema, "file_list"), eval = FALSE,
-            add = add
-          )
-        )
-      }
-      if (delete) {
-        query <- c(
-          query,
-          update_data(
-            object = object, revision = revision@file_list,
-            key = "file", name = c(schema, "file_list"), eval = FALSE,
-            delete = delete
-          ),
-          update_data(
-            object = object, revision = revision@main_table,
-            key = "bibtexkey", name = c(schema, "main_table"), eval = FALSE,
-            delete = delete
-          )
-        )
-      }
-      class(query) <- c("sql", "character")
+      query <- as(query, "sql")
       if (eval) {
         dbSendQuery(object, query)
         message("DONE!")

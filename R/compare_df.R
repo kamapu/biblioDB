@@ -52,7 +52,7 @@ setMethod(
   ),
   function(x, y, ...) {
     y <- as(y, "lib_db")
-    return(compare_df(x = x, y = y, key = "bibtexkey", ...))
+    return(compare_df(x = x, y = y, ...))
   }
 )
 
@@ -71,8 +71,7 @@ setMethod(
       stop("Name of schema is missing in input object.")
     }
     return(compare_df(
-      x = x@dir$connection, y = x, schema = x@dir$schema, key = "bibtexkey",
-      ...
+      x = x@dir$connection, y = x, schema = x@dir$schema, ...
     ))
   }
 )
