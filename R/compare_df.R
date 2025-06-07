@@ -10,7 +10,7 @@
 #'     database.
 #' @param y Either a [biblio::lib_df-class] or [lib_db-class] object including
 #'     the reviewed version of the electronic library.
-#' @param key Not required in these methods.
+#' @param key Not required in these methods (it is fixed as "bibtexkey").
 #' @param schema A character value with the name of the schema in database
 #'     containing the respective tables.
 #' @param ... Further arguments passed among methods.
@@ -29,13 +29,15 @@ setMethod(
   function(x, y, schema, ...) {
     c_list <- list()
     c_list$main_table <- compare_df(
-      x = x, y = y@main_table, key = "bibtexkey",
+      x = x, y = as(y@main_table, "data.frame"), key = "bibtexkey",
       name = c(schema, "main_table"), ...
     )
-    c_list$file_list <- compare_df(
-      x = x, y = y@file_list, key = "file",
-      name = c(schema, "file_list"), ...
-    )
+    if (!is.null(y@file_list)) {
+      c_list$file_list <- compare_df(
+        x = x, y = y@file_list, key = "file",
+        name = c(schema, "file_list"), ...
+      )
+    }
     class(c_list) <- c("comp_list", "list")
     return(c_list)
   }
@@ -69,8 +71,7 @@ setMethod(
       stop("Name of schema is missing in input object.")
     }
     return(compare_df(
-      x = x@dir$connection, y = x, schema = x@dir$schema,
-      ...
+      x = x@dir$connection, y = x, schema = x@dir$schema, ...
     ))
   }
 )

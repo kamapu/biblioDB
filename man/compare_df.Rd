@@ -25,7 +25,7 @@ containing the respective tables.}
 
 \item{...}{Further arguments passed among methods.}
 
-\item{key}{Not required in these methods.}
+\item{key}{Not required in these methods (it is fixed as "bibtexkey").}
 }
 \value{
 Either a \link[biblio:comp_df-class]{biblio::comp_df} or a \link[divDB:comp_list-class]{divDB::comp_list} object,

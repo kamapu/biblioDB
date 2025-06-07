@@ -21,7 +21,7 @@ bib_reviewed <- bibrefs[2:7, ]
 bib_reviewed$author[bib_reviewed$bibtexkey == "pliscoff2006"] <- "anonymous"
 
 # Do comparison
-update_data(conn, bib_reviewed, schema = "bibrefs_update")
+compare_df(conn, bib_reviewed, "bibrefs_update")
 
 # Compare using lib_db
 bib_reviewed2 <- as(bib_reviewed, "lib_db")
@@ -29,15 +29,7 @@ bib_reviewed2 <- as(bib_reviewed, "lib_db")
 bib_reviewed2@dir$connection <- conn
 bib_reviewed2@dir$schema <- "bibrefs_update"
 
-update_data(bib_reviewed2)
-
-# Update (only query)
-query <- update_data(bib_reviewed2, eval = FALSE, add = TRUE, delete = TRUE,
-    update = TRUE)
-query
-
-# Run the query
-update_data(bib_reviewed2, add = TRUE, delete = TRUE, update = TRUE)
+compare_df(bib_reviewed2)
 
 # Disconnect database
 disconnect_db(conn)
