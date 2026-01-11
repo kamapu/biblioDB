@@ -43,7 +43,7 @@ setMethod(
       query <- update_data(object, as(revision@main_table, "data.frame"),
         key = "bibtexkey",
         name = c(schema, "main_table"), eval = FALSE, add = add,
-        delete = delete, update = update, ...
+        update = update, ...
       )
       if (!is.null(revision@file_list)) {
         query <- c(query, update_data(object,
@@ -51,6 +51,16 @@ setMethod(
           key = "file",
           name = c(schema, "file_list"), eval = FALSE, add = add,
           delete = delete, update = update, ...
+        ))
+      }
+      # Delete main_table after deleting dependent files
+      if (delete) {
+        query <- c(query, update_data(object, as(
+          revision@main_table,
+          "data.frame"
+        ),
+        key = "bibtexkey", name = c(schema, "main_table"),
+        eval = FALSE, delete = delete, ...
         ))
       }
       query <- as(query, "sql")
